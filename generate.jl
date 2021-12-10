@@ -14,9 +14,15 @@ input = joinpath(root, "input")
 sample_html_path = Pluto.project_relative_path("frontend", "sample.html")
 write(joinpath(output, "index.html"), let
     original = read(sample_html_path, String)
-    replace(original,
+
+    cdn_root = "https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@$(string(Pluto.PLUTO_VERSION))/frontend"
+    replace(
+        replace(original,
+            "href=\"./" => "href=\"$(cdn_root)/",
+            "src=\"./" => "src=\"$(cdn_root)/",
+        ),
         """href="sample/""" => """href="./""",
-        ".jl\">" => "\">",
+        ".jl\">" => ".html\">",
     )
 end)
 
