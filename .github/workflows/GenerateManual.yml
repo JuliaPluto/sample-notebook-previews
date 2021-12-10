@@ -1,0 +1,39 @@
+name: Generate HTML exports of all sample notebooks
+
+on:
+    workflow_dispatch:
+        inputs:
+            version:
+                description: 'Pluto version, without v'
+                required: true
+                default: '0.17.3'
+
+jobs:
+    tag:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Install Julia
+              uses: julia-actions/setup-julia@v1
+              with:
+                  version: 1.7
+
+            - name: Update Pkg environment
+              run: |
+                  julia --project -e '
+                  import Pkg
+                  Pkg.add([
+                    Pkg.PackageSpec(name="Pluto", rev="v${{ github.event.inputs.version }}"),
+                    Pkg.PackageSpec(name="PlutoSliderServer", version="0.3.2-0.3"),
+                  ])
+                  Pkg.instantiate()
+                  include("generate.jl")
+                  '
+
+            - name: Deploy to gh-pages
+              uses: JamesIves/github-pages-deploy-action@releases/v3
+              with:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  BRANCH: gh-pages
+                  FOLDER: output
