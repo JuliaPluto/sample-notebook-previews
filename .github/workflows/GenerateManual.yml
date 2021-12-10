@@ -4,9 +4,9 @@ on:
     workflow_dispatch:
         inputs:
             version:
-                description: 'Pluto version, without v'
+                description: 'Pluto version with v prefix, or commit hash'
                 required: true
-                default: '0.17.3'
+                default: 'v0.17.3'
 
 jobs:
     generate:
@@ -24,7 +24,7 @@ jobs:
                   julia --project -e '
                   import Pkg
                   Pkg.add([
-                    Pkg.PackageSpec(name="Pluto", rev="v${{ github.event.inputs.version }}"),
+                    Pkg.PackageSpec(name="Pluto", rev="${{ github.event.inputs.version }}"),
                     Pkg.PackageSpec(name="PlutoSliderServer", version="0.3.2-0.3"),
                   ])
                   Pkg.instantiate()
