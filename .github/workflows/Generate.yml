@@ -1,4 +1,4 @@
-name: Tag latest version on Pluto release
+name: (auto) Generate HTML exports of all sample notebooks
 
 on:
     workflow_dispatch:
