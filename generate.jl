@@ -7,8 +7,8 @@ root = @__DIR__
 output = joinpath(root, "output")
 input = joinpath(root, "input")
 
-# isdir(output) || mkdir(output)
-# isdir(input) || mkdir(input)
+isdir(output) || mkdir(output)
+isdir(input) || mkdir(input)
 
 
 sample_html_path = Pluto.project_relative_path("frontend", "sample.html")
